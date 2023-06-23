@@ -9,6 +9,7 @@ export default class Address {
         this.city = city;
         this.postalCode = postalCode;
         this.stateProvince = stateProvince;
+        Object.seal(this);
     }
 
     toString() {
@@ -17,7 +18,7 @@ export default class Address {
             this.unit ? " Unit " + this.unit : null +
             this.apt ? " Apt " + this.unit  : null + 
             "\n" + this.city + " " + this.stateProvince + " " + this.postalCode
-        )
+        );
     }
 
     toJSON() {
@@ -31,3 +32,6 @@ export default class Address {
         };
     }
 }
+
+Object.seal(Address.prototype);
+Object.freeze(Address);

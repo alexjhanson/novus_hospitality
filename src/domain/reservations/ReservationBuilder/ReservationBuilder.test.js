@@ -36,6 +36,7 @@ describe('Test ReservationBuilder Class', () => {
                 _children: 0,
                 _adults: 2,
                 _rates: [new Rate('AAA', 235, 50)],
+                _status: Reservation.RESERVATION_STATUS.FUTURE,
                 _dateModified: new Date('2023-4-15').toISOString(),
             })
         });

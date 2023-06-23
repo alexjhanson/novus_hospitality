@@ -25,6 +25,7 @@ export default class ReservationBuilder {
         this._adults = 2;
         this._rates = [];
         this._reservation = null;
+        Object.seal(this);
     }
 
     // Setter methods.
@@ -104,6 +105,7 @@ export default class ReservationBuilder {
                 this._children,
                 this._pets,
                 this._rates,
+                Reservation.RESERVATION_STATUS.FUTURE,
                 this._createDate // Date modified intially date created.
             );
 
@@ -119,3 +121,10 @@ export default class ReservationBuilder {
     }
 
 }
+
+// Seal prototype, no additional properties can be added
+// but class can be extended.
+Object.seal(ReservationBuilder.prototype);
+
+// Freeze constructor function object.
+Object.freeze(ReservationBuilder);
