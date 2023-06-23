@@ -1,6 +1,7 @@
 import {InvalidStateError} from '../../errors/Errors';
 import {isValidDate} from '../../../common/date_utils/date_utils';
 import {verifyRates} from '../../../common/rate_utils/rate_utils';
+import {isNonNegativeInt} from '../../../common/number_utils/number_utils';
 import Reservation from '../Reservation/Reservation';
 
 
@@ -77,9 +78,11 @@ export default class ReservationBuilder {
             isValidDate(this._createDate) &&
             isValidDate(this._checkInDate) &&
             isValidDate(this._checkOutDate) &&
-            this._guestId && 
-            this._adults &&
-            verifyRates(this._rates)
+            isNonNegativeInt(this._pets) &&
+            isNonNegativeInt(this._children) &&
+            isNonNegativeInt(this._adults) &&
+            verifyRates(this._rates) &&
+            this._guestId 
         )
     }
 
