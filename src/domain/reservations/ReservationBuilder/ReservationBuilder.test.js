@@ -8,15 +8,17 @@ describe('Test ReservationBuilder Class', () => {
 
     describe('buildReservation()', () => {
 
+        const rates = new Rate('id', new Date().toISOString(),'AAA' ,'roomType', 235, 50, 'USD');
+
         test('returns a reservation object when all required fields are set correctly', () => {
 
             let builder = new ReservationBuilder();
 
-            builder.setCreateDate('2023-4-15')
+            builder
                 .setCheckInDate(new Date('2023-4-17'))
                 .setCheckOutDate('2023-4-19')
-                .setGuestId('guest id')
-                .setRates(new Rate('AAA', 235, 50));
+                .setRoomType('room type')
+                .setRates(rates);
 
             let result;
 
@@ -28,16 +30,17 @@ describe('Test ReservationBuilder Class', () => {
 
             expect(result).toBeInstanceOf(Reservation);
             expect(result).toEqual({
-                _createDate: new Date('2023-4-15').toISOString(),
+                _id: null,
+                _createDate: null,
                 _checkInDate: new Date('2023-4-17').toISOString(),
                 _checkOutDate: new Date('2023-4-19').toISOString(),
-                _guestId: 'guest id',
-                _pets: 0,
-                _children: 0,
+                _roomType: 'room type',
+                _rates: [rates],
+                _guestId: null,
                 _adults: 2,
-                _rates: [new Rate('AAA', 235, 50)],
-                _status: Reservation.RESERVATION_STATUS.FUTURE,
-                _dateModified: new Date('2023-4-15').toISOString(),
+                _children: 0,
+                _pets: 0,
+                _dateModified: null,
             })
         });
 
@@ -45,52 +48,55 @@ describe('Test ReservationBuilder Class', () => {
             expect(() => new ReservationBuilder().buildReservation()).toThrow(InvalidStateError);
         });
 
-        test('throws an InvalidStateError if at least one required field is not set', () => {
+        test('throws an InvalidStateError if at least one required field is not set or has an invalid value', () => {
 
-            // Leave out Guest ID.
+            // No adults.
             expect(() => {
-                new ReservationBuilder().setCreateDate('2023-4-15')
+                new ReservationBuilder()
                 .setCheckInDate(new Date('2023-4-17'))
                 .setCheckOutDate('2023-4-19')
-                .setRates(new Rate('AAA', 235, 50))
+                .setRoomType('room type')
+                .setRates(rates)
+                .setNumAdults(0)
                 .buildReservation();
             }).toThrow(InvalidStateError);
 
             // Leave out Rates.
             expect(() => {
-                new ReservationBuilder().setCreateDate('2023-4-15')
+                new ReservationBuilder()
                 .setCheckInDate(new Date('2023-4-17'))
                 .setCheckOutDate('2023-4-19')
-                .setGuestId('guest id')
+                .setRoomType('room type')
                 .buildReservation();
             }).toThrow(InvalidStateError);
 
             // Leave out checkout date.
             expect(() => {
-                new ReservationBuilder().setCreateDate('2023-4-15')
+                new ReservationBuilder()
                 .setCheckInDate(new Date('2023-4-17'))
-                .setGuestId('guest id')
-                .setRates(new Rate('AAA', 235, 50))
+                .setRoomType('room type')
+                .setRates(rates)
                 .buildReservation();
             }).toThrow(InvalidStateError);
 
             // Leave out checkin date.
             expect(() => {
-                new ReservationBuilder().setCreateDate('2023-4-15')
+                new ReservationBuilder()
                 .setCheckOutDate('2023-4-19')
-                .setGuestId('guest id')
-                .setRates(new Rate('AAA', 235, 50))
+                .setRoomType('room type')
+                .setRates(rates)
                 .buildReservation();
             }).toThrow(InvalidStateError);
 
-            // Leave out creation date.
+            // Leave out room type.
             expect(() => {
-                new ReservationBuilder().setCheckInDate(new Date('2023-4-17'))
+                new ReservationBuilder()
+                .setCheckInDate(new Date('2023-4-17'))
                 .setCheckOutDate('2023-4-19')
-                .setGuestId('guest id')
-                .setRates(new Rate('AAA', 235, 50))
+                .setRates(rates)
                 .buildReservation();
             }).toThrow(InvalidStateError);
+
         });
     });
 

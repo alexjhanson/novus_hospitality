@@ -1,7 +1,7 @@
 import {InvalidStateError} from '../../errors/Errors';
 import {isValidDate} from '../../../common/date_utils/date_utils';
 import {verifyRates} from '../../../common/rate_utils/rate_utils';
-import {isNonNegativeInt} from '../../../common/number_utils/number_utils';
+import {isNonNegativeIntStr, isPositiveIntStr} from '../../../common/number_utils/number_utils';
 import Reservation from '../Reservation/Reservation';
 
 
@@ -16,24 +16,19 @@ import Reservation from '../Reservation/Reservation';
 export default class ReservationBuilder {
 
     constructor() {
-        this._createDate = null;
         this._checkInDate = null;
         this._checkOutDate = null;
-        this._guestId = null;
-        this._pets = 0;
-        this._children = 0;
-        this._adults = 2;
+        this._roomType = null;
         this._rates = [];
+        this._guestId = null;
+        this._adults = 2;
+        this._children = 0;
+        this._pets = 0;
         this._reservation = null;
         Object.seal(this);
     }
 
     // Setter methods.
-    setCreateDate(date) {
-        this._createDate = new Date(date).toISOString();
-        return this;
-    }
-
     setCheckInDate(date) {
         this._checkInDate = new Date(date).toISOString();
         return this;
@@ -44,23 +39,8 @@ export default class ReservationBuilder {
         return this;
     }
 
-    setGuestId(id) {
-        this._guestId = id;
-        return this;
-    }
-
-    setNumPets(num) {
-        this._pets = num;
-        return this;
-    }
-
-    setNumChildren(num) {
-        this._children = num;
-        return this;
-    }
-
-    setNumAdults(num) {
-        this._adults = num;
+    setRoomType(type) {
+        this._roomType = type;
         return this;
     }
 
@@ -71,19 +51,38 @@ export default class ReservationBuilder {
         return this;
     }
 
+    setGuestId(id) {
+        this._guestId = id;
+        return this;
+    }
+
+    setNumAdults(num) {
+        this._adults = num;
+        return this;
+    }
+
+    setNumChildren(num) {
+        this._children = num;
+        return this;
+    }
+
+    setNumPets(num) {
+        this._pets = num;
+        return this;
+    }
+
     // Before building, make sure all required fields are set
     // and are the correct type.
     // return boolean true or false.
     __stateIsValid() {
         return !!(
-            isValidDate(this._createDate) &&
             isValidDate(this._checkInDate) &&
             isValidDate(this._checkOutDate) &&
-            isNonNegativeInt(this._pets) &&
-            isNonNegativeInt(this._children) &&
-            isNonNegativeInt(this._adults) &&
+            this._roomType &&
             verifyRates(this._rates) &&
-            this._guestId 
+            isPositiveIntStr(this._adults) &&
+            isNonNegativeIntStr(this._children) &&
+            isNonNegativeIntStr(this._pets)
         )
     }
 
@@ -97,16 +96,17 @@ export default class ReservationBuilder {
         }else if(this.__stateIsValid()) {
 
             this._reservation = new Reservation(
-                this._createDate,
+                null, // DB generates ID
+                null, // DB generates creation date
                 this._checkInDate,
                 this._checkOutDate,
+                this._roomType,
+                this._rates,
                 this._guestId,
                 this._adults,
                 this._children,
                 this._pets,
-                this._rates,
-                Reservation.RESERVATION_STATUS.FUTURE,
-                this._createDate // Date modified intially date created.
+                null, // DB generates date modfied
             );
 
             return this._reservation;

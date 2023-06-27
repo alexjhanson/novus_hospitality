@@ -1,4 +1,4 @@
-import { InvalidArgumentError } from "../../domain/errors/Errors";
+import { InvalidArgumentError, IllegalArgumentError } from "../../domain/errors/Errors";
 
 /*
  * Parse strings that represent currency figures.

@@ -19,35 +19,54 @@ describe('number utilities', () => {
         });
     });
 
-    describe('isIntString()', () => {
+    describe('isIntStr()', () => {
 
         test('return true if parameter is an int or string represention of an int', () => {
-            expect(numUtils.isIntString("8746")).toBe(true);
-            expect(numUtils.isIntString(897)).toBe(true);
-            expect(numUtils.isIntString(-97)).toBe(true);
-            expect(numUtils.isIntString("-34")).toBe(true);
+            expect(numUtils.isIntStr("8746")).toBe(true);
+            expect(numUtils.isIntStr(897)).toBe(true);
+            expect(numUtils.isIntStr(-97)).toBe(true);
+            expect(numUtils.isIntStr("-34")).toBe(true);
         });
 
         test('return false if parameter is not an int or string represention of an int', () => {
-            expect(numUtils.isIntString("string")).toBe(false);
-            expect(numUtils.isIntString(89.7)).toBe(false);
+            expect(numUtils.isIntStr("string")).toBe(false);
+            expect(numUtils.isIntStr(89.7)).toBe(false);
+            expect(numUtils.isIntStr([])).toBe(false);
+            expect(numUtils.isIntStr({})).toBe(false);
         });
     });
 
-    describe('isNonNegativeIntString()', () => {
+    describe('isNonNegativeIntStr()', () => {
 
         test('return true if parameter is an int >= 0 or string represention of an int >= 0', () => {
-            expect(numUtils.isIntString("0")).toBe(true);
-            expect(numUtils.isIntString(0)).toBe(true);
-            expect(numUtils.isIntString("34")).toBe(true);
+            expect(numUtils.isIntStr("0")).toBe(true);
+            expect(numUtils.isIntStr(0)).toBe(true);
+            expect(numUtils.isIntStr("34")).toBe(true);
+            expect(numUtils.isIntStr(5)).toBe(true);
         });
 
         test('return false if parameter is not an int >= 0 or string represention of an int >= 0', () => {
-            expect(numUtils.isNonNegativeIntString("string")).toBe(false);
-            expect(numUtils.isNonNegativeIntString(89.7)).toBe(false);
-            expect(numUtils.isNonNegativeIntString(-14)).toBe(false);
-            expect(numUtils.isNonNegativeIntString("-34")).toBe(false);
+            expect(numUtils.isNonNegativeIntStr("string")).toBe(false);
+            expect(numUtils.isNonNegativeIntStr(89.7)).toBe(false);
+            expect(numUtils.isNonNegativeIntStr(-14)).toBe(false);
+            expect(numUtils.isNonNegativeIntStr("-34")).toBe(false);
+            expect(numUtils.isNonNegativeIntStr([])).toBe(false);
+            expect(numUtils.isNonNegativeIntStr({})).toBe(false);
         });
     });
 
+    describe('isPositiveIntStr()', () => {
+
+        test('return true if parameter is an int > 0 or a string representation of an int > 0', () => {
+            expect(numUtils.isPositiveIntStr("3")).toBe(true);
+            expect(numUtils.isPositiveIntStr(5)).toBe(true);
+        });
+
+        test('return false if parameter is an int <= 0 or a string representation of an int <= 0', () => {
+            expect(numUtils.isPositiveIntStr("-3")).toBe(false);
+            expect(numUtils.isPositiveIntStr(-5)).toBe(false);
+            expect(numUtils.isPositiveIntStr("0")).toBe(false);
+            expect(numUtils.isPositiveIntStr(0)).toBe(false);
+        });
+    });
 });
